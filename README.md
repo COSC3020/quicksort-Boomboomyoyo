@@ -14,3 +14,11 @@ recursive call considers.
 Analyse the time complexity of your implementation and give a $\Theta$ bound for
 its worst-case runtime. Add your answer, including your reasoning, to this
 markdown file.
+
+
+## References
+A bunch of W3Schools stuff for syntax. The math operations were important to how I decided to do this too.
+https://www.w3schools.com/js/js_operators.asp
+https://www.w3schools.com/js/js_precedence.asp
+https://www.w3schools.com/jsref/jsref_obj_math.asp
+https://www.w3schools.com/js/js_loop_for.asp
