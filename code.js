@@ -1,63 +1,57 @@
 function quicksort(array) {
-    // Return array if it is guarunteed to already be sorted
-    if(array.length <= 1)
-    {
-        return array
-    }
+    //array.push(Infinity)
     // Temp variable holds information of array element to swap to elements
     temp = 0
-    // Determine how many subdivisions of array is needed to sort array
-    limit = Math.ceil(Math.log2(array.length))
-    // Until array is sorted, continue process
-    for(arrayDivisions = 1; arrayDivisions <= limit; arrayDivisions++)
-    {
-        // Select section based on sort count
-        for(j = 1; j <= arrayDivisions; j += 2)
+    // Initialize array which will contain ends of unsorted sections, it acts like a stack because
+    // the order in which we process arrays doesn't matter
+    //console.log(array.length)
+    sectionEnds = [0,array.length]
+    while(sectionEnds.length > 0)
+    {   
+        //console.log(array)
+        // Pop front and back of section to be sorted off array
+        back = sectionEnds.pop()
+        front = sectionEnds.pop()
+        //console.log("Back and front: " + front + ", " + back)
+        // If front and back are the same, go to next iteration of loop instead of processing
+        if(front != back)
         {
-            // If this is the first division of the array, end points are the front index and the last index of array
-            if(arrayDivisions == 1)
-            {
-                front = 0
-                back = array.length - 1
-            } else
-            // Otherwise, select section based on array divisions. Second division should be first half then
-            // second half, third division should be first quarter, second quarter, etc.
-            // This is a little confusing, first division doesn't actually divide array. This is because
-            // I haven't consolidated these two outer arrays yet.
-            {
-                if(j == arrayDivisions - 1)
-                {
-                    front = (Math.floor(((j+2)/(2**(arrayDivisions)))*array.length-1)+1)
-                    back = array.length - 1
-                } else
-                {
-                    front = (Math.ceil((j/(2**(arrayDivisions)))*array.length-1)+1)
-                    back = Math.floor(((j+2)/(2**(arrayDivisions)))*array.length-1)-1
-                }
-            }
-            // Sort section
-            // Select index after pivot where smaller values will be stored
+            // Variable holding index of the first value past the values less than the pivot
             lessEnd = front + 1
-            // For each element, compare to pivot and move to smaller values section if smaller
-            for(i=front; i <= back; i++)
+            // Starting at the first uncompared value, compare each value to the pivot. If less,
+            // move to the end of the less than pivot portion of the array
+            for(i=lessEnd; i <= back; i++)
             {
                 if(array[i] < array[front]) 
                 {
-                    // Swap smaller element with element at the end of the smaller values section
                     temp = array[lessEnd]
                     array[lessEnd] = array[i]
                     array[i] = temp
-                    lessEnd +=1
+                    // This is to guard lessEnd from going out of array bounds
+                    if(lessEnd != back)
+                    {
+                        lessEnd +=1
+                    }
                 }
             }
-            // Now, swap the pivot with whatever is at the end of the smaller values section
-            temp = array[lessEnd]
-            array[lessEnd] = array[front]
+            // Swap the pivot with the end of the section of the array less than it
+            temp = array[lessEnd-1]
+            array[lessEnd-1] = array[front]
             array[front] = temp
+        
+            // If the section of the array is larger than one, push new sections to sort onto the stack
+            if(front != back)
+            {
+                sectionEnds.push(front)
+                sectionEnds.push(lessEnd-1)
+                sectionEnds.push(lessEnd)
+                sectionEnds.push(back)
+            }
+            //console.log(sectionEnds)
         }
     }
-    // Array should be sorted, return array
+    //array.pop()
     return array
 }
 
-console.log(quicksort([4,7,3,9,10,2,13,11]))
+//console.log(quicksort([8,7,6,5,4,3,2,3,4]))
